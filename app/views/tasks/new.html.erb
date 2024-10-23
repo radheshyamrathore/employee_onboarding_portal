@@ -1,0 +1,9 @@
+<h1><%= @employee.name %></h1>
+<p>Email: <%= @employee.email %></p>
+<p>Department: <%= @employee.department %></p>
+<p>Role: <%= @employee.role %></p>
+<p>Onboarding Status: <%= @employee.onboarding_status %></p>
+
+<h2>Tasks</h2>
+<%= link_to 'Add Task', new_employee_task_path(@employee) %>
+

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Employee Onboarding Portal</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true %>
+  </head>
+
+  <body>
+    <nav>
+      <% if user_signed_in? %>
+        <%= link_to 'Dashboard', current_user.hr_manager? ? hr_manager_dashboard_path : employee_dashboard_path %>
+        <%= link_to 'Log out', users_sign_out_path, method: :get %>
+      <% else %>
+        <%= link_to 'Log in', new_user_session_path %>
+        <%= link_to 'Sign up', new_user_registration_path %>
+      <% end %>
+    </nav>
+
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <%= yield %>
+  </body>
+</html>
+

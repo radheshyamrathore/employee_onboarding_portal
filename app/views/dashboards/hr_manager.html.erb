@@ -1,0 +1,37 @@
+<h1>HR Manager Dashboard</h1>
+
+<h2>Employees</h2>
+<%= link_to 'Add New Employee', new_employee_path %>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Department</th>
+      <th>Role</th>
+      <th>Onboarding Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @employees.each do |employee| %>
+      <tr>
+        <td><%= employee.name %></td>
+        <td><%= employee.email %></td>
+        <td><%= employee.department %></td>
+        <td><%= employee.role %></td>
+        <td><%= employee.onboarding_status %></td>
+        <td>
+          <%= link_to 'View', employee_path(employee) %>
+          <%= link_to 'Edit', edit_employee_path(employee) %>
+          <%= form_with(model: employee, local: true, method: :delete) do |form| %>
+            <%= form.submit 'Delete', data: { confirm: 'Are you sure?' } %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to 'Employee Dashboard', employee_dashboard_path(employee_id: employee.id) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

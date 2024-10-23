@@ -1,0 +1,57 @@
+<h1><%= @employee.name %></h1>
+<p>Email: <%= @employee.email %></p>
+<p>Department: <%= @employee.department %></p>
+<p>Role: <%= @employee.role %></p>
+<p>Onboarding Status: <%= @employee.onboarding_status %></p>
+
+<h2>Tasks</h2>
+<ul>
+  <% @employee.tasks.each do |task| %>
+    <li>
+      <%= task.title %> - <%= task.status %>
+      <%= link_to 'Edit', edit_employee_task_path(task) %>
+    </li>
+  <% end %>
+</ul>
+
+<!-- Add Task button -->
+<button id="add-task-button">Add Task</button>
+
+<!-- Task creation form directly on the employee's show page -->
+<div id="task-form" style="display: none;">
+  <h2>Add a Task</h2>
+  <%= form_with(url: employee_tasks_path(@employee), local: true) do |form| %>
+    <div>
+      <%= form.label :title %>
+      <%= form.text_field :title, name: "title" %>
+    </div>
+
+    <div>
+      <%= form.label :description %>
+      <%= form.text_area :description, name: "description" %>
+    </div>
+
+    <div>
+      <%= form.label :status %>
+      <%= form.select :status, Task.statuses.keys.map { |s| [s.humanize, s] }, { name: "status" } %>
+    </div>
+
+    <div>
+      <%= form.submit 'Create Task' %>
+    </div>
+  <% end %>
+</div>
+
+  <%= link_to 'Back', hr_manager_dashboard_path %>
+
+<script>
+  // JavaScript to toggle the task form visibility
+  document.getElementById('add-task-button').addEventListener('click', function() {
+    var taskForm = document.getElementById('task-form');
+    if (taskForm.style.display === 'none') {
+      taskForm.style.display = 'block'; // Show the form
+    } else {
+      taskForm.style.display = 'none'; // Hide the form
+    }
+  });
+</script>

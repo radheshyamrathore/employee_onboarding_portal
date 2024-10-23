@@ -1,0 +1,18 @@
+<h1>Employee Dashboard</h1>    
+<% if current_user.role == 'hr_manager' %> 
+  <%= link_to 'Back', hr_manager_dashboard_path %>
+<% end %>
+<h2>Welcome, <%= @employee&.name %></h2>
+
+<h3>Your Tasks</h3>
+<% @tasks&.each do |task| %>
+  <div>
+    <h4><%= task.title %></h4>
+    <p><%= task.description %></p>
+
+    <%= form_with(url: employee_task_path(@employee, task), method: :patch, local: true) do |form| %>
+      <%= form.hidden_field :status, value: 'completed' %>
+      <%= form.submit 'Mark as Complete', disabled: task.status == "completed" %>
+    <% end %>
+  </div>
+<% end %>
