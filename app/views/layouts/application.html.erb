@@ -10,7 +10,7 @@
   </head>
 
   <body>
-    <nav>
+    <nav class = "nav">
       <% if user_signed_in? %>
         <%= link_to 'Dashboard', current_user.hr_manager? ? hr_manager_dashboard_path : employee_dashboard_path %>
         <%= link_to 'Log out', users_sign_out_path, method: :get %>
