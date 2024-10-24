@@ -1,0 +1,13 @@
+<!-- app/views/users/sessions/two_factor_authentication.html.erb -->
+<h2>Two-Factor Authentication</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), method: :post) do |f| %>
+  <div class="field">
+    <%= f.label :otp_attempt, "Enter your two-factor code" %>
+    <%= f.text_field :otp_attempt, autocomplete: "off" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Verify" %>
+  </div>
+<% end %>

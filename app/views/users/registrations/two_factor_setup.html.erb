@@ -1,0 +1,17 @@
+# app/views/users/registrations/two_factor_setup.html.erb
+<h2>Set Up Two-Factor Authentication</h2>
+
+<%= image_tag qrcode_path %>
+
+<p>Scan this QR code with your authenticator app, or enter this code manually: <%= @otp_secret %></p>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <div class="field">
+    <%= f.label :otp_attempt, "Enter the code from your authenticator app" %>
+    <%= f.text_field :otp_attempt, autocomplete: "off" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Verify and Enable 2FA" %>
+  </div>
+<% end %>
