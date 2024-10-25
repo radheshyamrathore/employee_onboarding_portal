@@ -314,8 +314,11 @@ Devise.setup do |config|
   config.unlock_in = 1.hour
 
   # Enable OmniAuth providers
-  config.omniauth :linkedin, ENV['LINKEDIN_KEY'], ENV['LINKEDIN_SECRET'], scope: 'r_liteprofile r_emailaddress'
-  
+  # config/initializers/devise.rb
+
+  config.omniauth :linkedin, ENV['LINKEDIN_CLIENT_ID'], ENV['LINKEDIN_CLIENT_SECRET'],
+  scope: 'r_liteprofile r_emailaddress', redirect_uri: 'http://localhost:3000/users/auth/linkedin/callback'
+    
   config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],
     {
       scope: 'email, profile',

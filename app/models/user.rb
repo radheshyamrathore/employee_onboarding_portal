@@ -1,8 +1,7 @@
 class User < ApplicationRecord
-  devise :two_factor_authenticatable,
-         :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:linkedin, :google_oauth2]
+         :omniauthable, omniauth_providers: [:google_oauth2, :linkedin]
 
   enum role: [:employee, :hr_manager]
 
@@ -10,23 +9,29 @@ class User < ApplicationRecord
 
   after_initialize :set_default_role, if: :new_record?
 
-  # Method to handle LinkedIn OAuth login
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
+  # Method for Google OAuth, updated to work with flat hash structure
+  def self.from_google(auth_params)
+    where(provider: auth_params[:provider], uid: auth_params[:uid]).first_or_create do |user|
+      user.email = auth_params[:email]
       user.password = Devise.friendly_token[0, 20]
-      user.name = auth.info.name
+      user.full_name = auth_params[:full_name]
+      user.avatar_url = auth_params[:avatar_url]
+      # Add any other fields you want to save
     end
   end
 
-  # Method to handle Google OAuth login
-  def self.from_google(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0, 20]
-      user.full_name = auth.info.name
-      user.avatar_url = auth.info.image
+  # Method for LinkedIn OAuth
+  def self.from_omniauth(auth)
+    user = where(provider: auth.provider, uid: auth.uid).first_or_create do |new_user|
+      new_user.email = auth.info.email
+      new_user.password = Devise.friendly_token[0, 20] # Random password for OAuth users
+      new_user.full_name = auth.info.name # Adjusted to match `full_name` field
     end
+
+    # Ensure OTP secret for 2FA is generated for all users (including OAuth)
+    user.otp_secret ||= generate_otp_secret
+    user.save
+    user
   end
 
   private

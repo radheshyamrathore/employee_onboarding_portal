@@ -1,41 +1,12 @@
 # frozen_string_literal: true
 
 class Users::RegistrationsController < Devise::RegistrationsController
-  def create
-    super do |resource|
-      if resource.persisted?
-        resource.otp_secret = User.generate_otp_secret
-        resource.save
-        session[:otp_user_id] = resource.id
-        redirect_to users_two_factor_setup_path
-      end
-    end
-  end
+  before_action :configure_sign_up_params, only: [:create]
 
-  def two_factor_setup
-    @user = User.find(session[:otp_user_id])
-    @otp_secret = @user.otp_secret
-    @qr_code = RQRCode::QRCode.new(
-      @user.provisioning_uri(
-        @user.email,
-        issuer: 'Your App Name'
-      )
-    ).as_svg(module_size: 4).html_safe
-  end
-  
-  def update
-    super do |resource|
-      if params[:user][:otp_attempt].present?
-        if resource.validate_and_consume_otp!(params[:user][:otp_attempt])
-          resource.otp_required_for_login = true
-          resource.save
-          set_flash_message :notice, :two_factor_enabled
-        else
-          set_flash_message :alert, :two_factor_incorrect
-          render :two_factor_setup and return
-        end
-      end
-    end
+  protected
+
+  def configure_sign_up_params
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:full_name, :email, :password, :password_confirmation])
   end
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
