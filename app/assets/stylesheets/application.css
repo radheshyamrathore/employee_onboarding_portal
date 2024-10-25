@@ -19,10 +19,11 @@
     line-height: 1.6;
     margin: 0;
     padding: 20px;
+    background-color: #f5f5e3;
   }
   
   nav {
-    background-color: #f4f4f4;
+    background-color: #a09e9e;
     padding: 10px;
     margin-bottom: 20px;
   }
@@ -78,3 +79,8 @@
   input[type="submit"]:hover {
     background-color: #45a049;
   }
+/* 
+  page-bg {
+    background-color: #9e9e1a;
+    font-family: Arial, sans-serif;
+  } */
