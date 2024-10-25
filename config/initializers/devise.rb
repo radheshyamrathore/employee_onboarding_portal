@@ -310,5 +310,21 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+  config.maximum_attempts = 3
+  config.unlock_in = 1.hour
+
+  # Enable OmniAuth providers
+  # config/initializers/devise.rb
+
+  config.omniauth :linkedin, ENV['LINKEDIN_CLIENT_ID'], ENV['LINKEDIN_CLIENT_SECRET'],
+  scope: 'r_liteprofile r_emailaddress', redirect_uri: 'http://localhost:3000/users/auth/linkedin/callback'
+    
+  config.omniauth :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],
+    {
+      scope: 'email, profile',
+      prompt: 'select_account',
+      image_aspect_ratio: 'square',
+      image_size: 50
+    }
   
 end
