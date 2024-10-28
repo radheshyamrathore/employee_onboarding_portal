@@ -29,3 +29,8 @@
 
 en:
   hello: "Hello world"
+
+en:
+  omniauth:
+    google_oauth2: "Sign in with Google"
+    linkedin: "Sign in with LinkedIn"

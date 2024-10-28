@@ -1,0 +1,22 @@
+databases:
+  - name: employee_onboarding_portal
+    databaseName: employee_onboarding_portal_production
+    user: employee_onboarding_portal
+    plan: free
+
+services:
+  - type: web
+    name: employee_onboarding_portal
+    runtime: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rails server -b 0.0.0.0 -p 10000"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: employee_onboarding_portal
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false # set to true if you want Render to auto-sync your master key from .env file
+      - key: WEB_CONCURRENCY
+        value: 2
